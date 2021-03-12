@@ -1,0 +1,15 @@
+public class HTTPCalloutController {
+
+	// Before Running the below method, make sure to specify the end-point URL in the Remote Site Settings
+	// Remote Site URL : https://postman-echo.com
+    
+    public static void requestData() {
+        HttpRequest req = new HttpRequest();  
+        req.setEndpoint('https://postman-echo.com/get?foo1=bar1&foo2=bar2');  
+        req.setMethod('GET');  
+        Http h = new Http();  
+        HttpResponse res = h.send(req);  
+        System.debug(res);  
+    }
+    
+}
