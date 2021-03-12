@@ -1,0 +1,25 @@
+trigger RollUpInAccountForContactCount on Contact (after INSERT, after UPDATE, after DELETE, after UNDELETE) {
+    
+    Set<Id> accountIdsToUpdate = new Set<Id>();
+    List<Account> listOfAccountsToUpdate = new List<Account>();
+    
+    if(Trigger.isInsert || Trigger.isUndelete){
+        for(Contact con: trigger.new){
+            accountIdsToUpdate.add(con.accountID);
+        }
+    }
+    if(Trigger.isUpdate || Trigger.isDelete){
+        for(Contact con: trigger.old){
+            accountIdsToUpdate.add(con.accountID);
+        }
+    }
+    
+    for(Account acc: [SELECT Id, Name, Number_of_Contacts__c, (Select Id from Contacts) from Account where Id IN: accountIdsToUpdate]){
+        Account a = new Account();
+        a.Id = acc.Id;
+        a.Number_of_Contacts__c = acc.Contacts.size();
+        listOfAccountsToUpdate.add(a);
+    }
+    
+    update listOfAccountsToUpdate;
+}
