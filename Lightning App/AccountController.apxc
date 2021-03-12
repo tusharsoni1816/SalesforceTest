@@ -1,0 +1,9 @@
+public class AccountController {
+
+    @AuraEnabled
+    public static List<Account> getAccountRecords() {
+        List<Account> listOfAccounts = [SELECT Id, Name, Type, Phone, Industry FROM Account ORDER BY CreatedDate DESC LIMIT 10];
+        return listOfAccounts;
+    }
+    
+}
